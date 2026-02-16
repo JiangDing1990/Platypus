@@ -45,7 +45,7 @@
     NSString *tmpDir = NSTemporaryDirectory();
     char *tmpdir_cstring = getenv("TMPDIR");
     if (tmpdir_cstring != NULL && strlen(tmpdir_cstring) > 0) {
-      NSString *tmpDir = [NSString stringWithUTF8String:tmpdir_cstring];
+      tmpDir = [NSString stringWithUTF8String:tmpdir_cstring];
     } else {
       if (!tmpDir) {
           NSLog(@"NSTemporaryDirectory() returned nil");
