@@ -415,7 +415,6 @@
                                                                  options:0
                                                                    error:nil];
     if (!infoData || ![infoData writeToFile:infoPlistPath atomically:YES]) {
-        // _error = @"Error writing Info.plist";
         _error = [NSString stringWithFormat:@"Error writing Info.plist: '%@'.", infoPlistPath];
         return NO;
     }
