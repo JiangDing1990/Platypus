@@ -41,12 +41,18 @@
     // http://cocoawithlove.com/2009/07/temporary-files-and-folders-in-cocoa.html
     
     NSString *tmpFileNameTemplate = fileName ? fileName : @"tmp_file_platypus_macos.XXXXXX";
+    // Allow user to override the temporary directory by setting the TMPDIR environment variable
     NSString *tmpDir = NSTemporaryDirectory();
-    if (!tmpDir) {
-        NSLog(@"NSTemporaryDirectory() returned nil");
-        return nil;
+    char *tmpdir_cstring = getenv("TMPDIR");
+    if (tmpdir_cstring != NULL && strlen(tmpdir_cstring) > 0) {
+      tmpDir = [NSString stringWithUTF8String:tmpdir_cstring];
+    } else {
+      if (!tmpDir) {
+          NSLog(@"NSTemporaryDirectory() returned nil");
+          return nil;
+      }
     }
-    
+
     NSString *tempFileTemplate = [tmpDir stringByAppendingPathComponent:tmpFileNameTemplate];
     const char *tempFileTemplateCString = [tempFileTemplate fileSystemRepresentation];
     char *tempFileNameCString = (char *)malloc(strlen(tempFileTemplateCString) + 1);
