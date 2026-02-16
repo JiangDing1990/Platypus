@@ -260,11 +260,17 @@
     // .app bundle
     // Get temporary directory, make sure it's kosher. Apparently NSTemporaryDirectory() can return nil
     // See http://www.cocoadev.com/index.pl?NSTemporaryDirectory
-    NSString *tmpPath = NSTemporaryDirectory();
-    if (tmpPath == nil) {
+    // Allow user to override the temporary directory by setting the TMPDIR environment variable
+    char *tmpdir_cstring = getenv("TMPDIR");
+    if (tmpdir_cstring != NULL && strlen(tmpdir_cstring) > 0) {
+      NSString *tmpPath = [NSString stringWithUTF8String:tmpdir_cstring];
+    } else {
+      NSString *tmpPath = NSTemporaryDirectory();
+      if (tmpPath == nil) {
         tmpPath = @"/tmp/"; // Fallback, just in case
+      }
     }
-    
+
     // Make sure we can write to temp path
     if ([FILEMGR isWritableFileAtPath:tmpPath] == NO) {
         _error = [NSString stringWithFormat:@"Could not write to the temp directory '%@'.", tmpPath];
