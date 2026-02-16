@@ -261,11 +261,11 @@
     // Get temporary directory, make sure it's kosher. Apparently NSTemporaryDirectory() can return nil
     // See http://www.cocoadev.com/index.pl?NSTemporaryDirectory
     // Allow user to override the temporary directory by setting the TMPDIR environment variable
+    NSString *tmpPath = NSTemporaryDirectory();
     char *tmpdir_cstring = getenv("TMPDIR");
     if (tmpdir_cstring != NULL && strlen(tmpdir_cstring) > 0) {
-      NSString *tmpPath = [NSString stringWithUTF8String:tmpdir_cstring];
+      tmpPath = [NSString stringWithUTF8String:tmpdir_cstring];
     } else {
-      NSString *tmpPath = NSTemporaryDirectory();
       if (tmpPath == nil) {
         tmpPath = @"/tmp/"; // Fallback, just in case
       }
