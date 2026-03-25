@@ -23,11 +23,5 @@
 * Fix selection change when item is deleted from the Bundled Files List (select item above)
 * Performance optimization in the app build process (also include precompiled nib)
 * Bundle ScriptExec and MainMenu.nib into CLT Mach-O binary
-
-DONE * Harden CI testing for this old project
-DONE * Create more automated tests for command line tool and document existing tests
-DONE * Add GitHub action to test install of platypus command line tool
-DONE * Base64-encode ScriptExec binary to ensure that Apple's annoying notarization works.
-
 * Update FAQ to answer question wrt relative interpreter path / bundling own interpreter
 * Update Uninstall Platypus shell script so it works

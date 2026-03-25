@@ -1,6 +1,10 @@
 # Platypus Version History
 
-### For 5.5.0 - 02/12/2025
+### For 5.6.0 - 25/03/2026
+
+* Various minor bug fixes
+
+### 5.5.0 - 02/12/2025
 
 * Platypus.app and the platypus command line tool are now notarized by Apple
 * Now requires macOS 11 "Big Sur" or later
@@ -12,11 +16,11 @@
 * Extensive modernization of codebase
 * Much-improved tests for command line tool
 
-### For 5.4.1 - 22/10/2022
+### 5.4.1 - 22/10/2022
 
 * Fixed signing issues
 
-### For 5.4 - 03/09/2022
+### 5.4 - 03/09/2022
 
 * Added native support for arm64 CPU architecture. Both Platypus and the apps it generates are now Universal ARM/Intel 64-bit binaries
 * New application icon

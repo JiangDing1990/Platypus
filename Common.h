@@ -32,7 +32,7 @@
 
 // General program information
 #define PROGRAM_NAME                @"Platypus"
-#define PROGRAM_VERSION             @"5.5.0"
+#define PROGRAM_VERSION             @"5.6.0"
 #define PROGRAM_CREATOR_STAMP       [NSString stringWithFormat:@"%@-%@", PROGRAM_NAME, PROGRAM_VERSION]
 #define PROGRAM_MIN_SYS_VERSION     @"11.0"
 #define PROGRAM_BUNDLE_IDENTIFIER   [NSString stringWithFormat:@"org.sveinbjorn.%@", PROGRAM_NAME]
