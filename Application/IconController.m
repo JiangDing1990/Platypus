@@ -326,7 +326,7 @@ typedef NS_ENUM(NSUInteger, PlatypusIconPreset) {
         _icnsFilePath = nil;
     }
     
-    if (path != nil && [_icnsFilePath isEqualToString:@""] == NO) {
+    if (path != nil && [path isEqualToString:@""] == NO) {
         _icnsFilePath = [[NSString alloc] initWithString:path];
         [fileWatcherQueue addPath:_icnsFilePath];
     }

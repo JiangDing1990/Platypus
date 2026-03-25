@@ -206,7 +206,9 @@
         [typeListController removeItemAtIndex:selectedIndex];
 
         NSInteger rowToSelect = selectedIndex - 1;
-        [tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:rowToSelect] byExtendingSelection:NO];
+        if (rowToSelect >= 0) {
+            [tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:rowToSelect] byExtendingSelection:NO];
+        }
         
         [tableView reloadData];
         [self setSuffixListEnabled:([uniformTypeListController itemCount] == 0)];

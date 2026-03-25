@@ -44,6 +44,8 @@
     #import "NSTask+Description.h"
 #endif
 
+#define MIN_TEXTVIEW_FONT_SIZE 5.0f
+
 @interface SEController()
 {
     // Progress bar
@@ -642,12 +644,14 @@ static const NSUInteger detailsHeight = 224;
             // Set status item title and icon
             [statusItem setTitle:statusItemTitle];
             
-            NSSize statusItemSize = [statusItemImage size];
-            CGFloat rel = 18/statusItemSize.height;
-            NSSize finalSize = NSMakeSize(statusItemSize.width * rel, statusItemSize.height * rel);
-            [statusItemImage setSize:finalSize];
-            [statusItemImage setTemplate:statusItemIconIsTemplate];
-            [statusItem setImage:statusItemImage];
+            NSSize statusItemImageSize = [statusItemImage size];
+            if (statusItemImageSize.height > 0.f && statusItemImageSize.width > 0.f) {
+                CGFloat rel = 18/statusItemImageSize.height;
+                NSSize finalSize = NSMakeSize(statusItemImageSize.width * rel, statusItemImageSize.height * rel);
+                [statusItemImage setSize:finalSize];
+                [statusItemImage setTemplate:statusItemIconIsTemplate];
+                [statusItem setImage:statusItemImage];
+            }
             
             // Create menu for our status item
             statusItemMenu = [[NSMenu alloc] initWithTitle:@""];
@@ -1185,6 +1189,9 @@ static const NSUInteger detailsHeight = 224;
 
 - (void)clearOutputBuffer {
     NSTextStorage *textStorage = [outputTextView textStorage];
+    if ([textStorage length] == 0) {
+        return;
+    }
     NSRange range = NSMakeRange(0, [textStorage length]-1);
     [textStorage beginEditing];
     [textStorage replaceCharactersInRange:range withString:@""];
@@ -1353,7 +1360,6 @@ static const NSUInteger detailsHeight = 224;
 #pragma mark - Text resizing
 
 - (void)changeFontSize:(CGFloat)delta {
-    
     if (interfaceType == PlatypusInterfaceType_WebView) {
         // Web View
         if (delta > 0) {
@@ -1363,14 +1369,12 @@ static const NSUInteger detailsHeight = 224;
         }
     } else {
         // Text field
-        CGFloat newFontSize = [textFont pointSize] + delta;
-        if (newFontSize < 5.0) {
-            newFontSize = 5.0;
-        }
-
-        textFont = [[NSFontManager sharedFontManager] convertFont:textFont toSize:newFontSize];
+        CGFloat newFontSize = fmax([textFont pointSize] + delta, MIN_TEXTVIEW_FONT_SIZE);
+        textFont = [[NSFontManager sharedFontManager] convertFont:textFont
+                                                           toSize:newFontSize];
         [outputTextView setFont:textFont];
-        [DEFAULTS setObject:@((float)newFontSize) forKey:ScriptExecDefaultsKey_UserFontSize];
+        [DEFAULTS setObject:@((float)newFontSize)
+                     forKey:ScriptExecDefaultsKey_UserFontSize];
         [outputTextView didChangeText];
     }
 }

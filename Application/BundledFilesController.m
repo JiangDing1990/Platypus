@@ -143,18 +143,18 @@
     
     // Otherwise, loop through all files, calculate size in a separate queue
     [bundleSizeTextField setStringValue:@"Calculating size..."];
-    
+
+    NSArray *snapshot = [files copy];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^(void){
-        
         UInt64 size = 0;
-        for (NSDictionary *fileInfoDict in files) {
+        for (NSDictionary *fileInfoDict in snapshot) {
             size += [WORKSPACE fileOrFolderSize:fileInfoDict[@"Path"]];
         }
         
         NSString *totalSizeString = [WORKSPACE fileSizeAsHumanReadableString:size];
-        NSString *pluralS = ([files count] > 1) ? @"s" : @"";
-        NSString *itemsSizeString = [NSString stringWithFormat:@"%lu item%@, %@", (unsigned long)[files count], pluralS, totalSizeString];
-        NSString *tooltipString = [NSString stringWithFormat:@"%lu item%@ (%llu bytes)", (unsigned long)[files count], pluralS, size];
+        NSString *pluralS = ([snapshot count] > 1) ? @"s" : @"";
+        NSString *itemsSizeString = [NSString stringWithFormat:@"%lu item%@, %@", (unsigned long)[snapshot count], pluralS, totalSizeString];
+        NSString *tooltipString = [NSString stringWithFormat:@"%lu item%@ (%llu bytes)", (unsigned long)[snapshot count], pluralS, size];
         _totalSizeOfFiles = size;
         
         //run UI updates on main thread
@@ -295,7 +295,7 @@
     for (int i = 0; i < [files count]; i++) {
         if ([selectedItems containsIndex:i]) {
             NSDictionary *fileInfoDict = files[i];
-            NSString *name = basenameOnly ? fileInfoDict[@"Path"] : [fileInfoDict[@"Path"] lastPathComponent];
+            NSString *name = !basenameOnly ? fileInfoDict[@"Path"] : [fileInfoDict[@"Path"] lastPathComponent];
             [copyStr appendString:[NSString stringWithFormat:@"%@ ", name]];
         }
     }
@@ -367,14 +367,16 @@
 
 - (IBAction)removeSelectedFiles:(id)sender {
     NSIndexSet *selectedItems = [tableView selectedRowIndexes];
-    for (NSInteger i = [files count]; i >= 0; i--) {
+    for (NSInteger i = [files count] - 1; i >= 0; i--) {
         if ([selectedItems containsIndex:i]) {
             [files removeObjectAtIndex:i];
         }
     }
     if ([tableView numberOfRows]) {
         NSInteger rowToSelect = [selectedItems firstIndex] - 1;
-        [tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:rowToSelect] byExtendingSelection:NO];
+        if (rowToSelect >= 0) {
+            [tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:rowToSelect] byExtendingSelection:NO];
+        }
     }
     
     [self updateUI];

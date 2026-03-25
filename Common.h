@@ -101,6 +101,7 @@
 #define DEFAULT_UTIS                @[(NSString *)kUTTypeItem, (NSString *)kUTTypeFolder]
 #define DEFAULT_URI_PROTOCOLS       @[]
 #define DEFAULT_STATUS_ITEM_TITLE   @"Title"
+#define DEFAULT_SIGNING_IDENTITY    @"None"
 
 #define SHELL_COMMAND_STRING_FONT   [NSFont userFixedPitchFontOfSize:11.0]
 

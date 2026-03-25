@@ -276,6 +276,7 @@
 - (IBAction)revealScript:(id)sender {
     if ([FILEMGR fileExistsAtPath:[scriptPathTextField stringValue]] == NO) {
         [Alerts alert:@"File not found" subText:@"No file exists at the specified path"];
+        return;
     }
     [WORKSPACE selectFile:[scriptPathTextField stringValue] inFileViewerRootedAtPath:[scriptPathTextField stringValue]];
 }
@@ -344,7 +345,7 @@
     
     // Get default app bundle name
     NSString *defaultAppBundleName = [appNameTextField stringValue];
-    if (![defaultAppBundleName hasSuffix:@"app"]) {
+    if (![defaultAppBundleName hasSuffix:@".app"]) {
         defaultAppBundleName = [NSString stringWithFormat:@"%@.app", defaultAppBundleName];
     }
     
@@ -426,8 +427,8 @@
 //        //spec[AppSpecKey_StripNib] = @(NO);
 //    }
     spec[AppSpecKey_Overwrite] = @YES;
-    if (![[DEFAULTS stringForKey:DefaultsKey_SigningIdentity] isEqualToString:@"None"]) {
-        spec[AppSpecKey_SigningIdentity] = [DEFAULTS stringForKey:@"SigningIdentity"];
+    if (![[DEFAULTS stringForKey:DefaultsKey_SigningIdentity] isEqualToString:DEFAULT_SIGNING_IDENTITY]) {
+        spec[AppSpecKey_SigningIdentity] = [DEFAULTS stringForKey:DefaultsKey_SigningIdentity];
     }
     
     // Verify that the values in the spec are OK
@@ -589,7 +590,7 @@
         [self interfaceTypeDidChange:nil];
     } else {
         [Alerts alert:@"Invalid interface type"
-        subTextFormat:@"App spec contains invalid interface type '%@'. Falling back to default."];
+        subTextFormat:@"App spec contains invalid interface type '%@'. Falling back to default.", spec[AppSpecKey_InterfaceType]];
         [interfaceTypePopupButton selectItemWithTitle:DEFAULT_INTERFACE_TYPE_STRING];
     }
         

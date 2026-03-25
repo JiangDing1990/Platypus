@@ -270,11 +270,12 @@
     }
     
     FILE *file;
-    unsigned char buf[2];
+    unsigned char buf[2] = {0, 0};
     file = fopen([path fileSystemRepresentation], "r");
-    fread(buf, 1, 2, file);
-    fclose(file);
-    
+    if (file) {
+        fread(buf, 1, 2, file);
+        fclose(file);
+    }
     return (buf[0] == '#' && buf[1] == '!');
 }
 

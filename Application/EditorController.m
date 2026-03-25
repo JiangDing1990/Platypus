@@ -35,6 +35,8 @@
 #import "NSTextView+JSDExtensions.h"
 #import "NSFileManager+TempFiles.h"
 
+#define MIN_EDITOR_TEXTVIEW_FONT_SIZE 5.0f
+
 @interface EditorController()
 {
     IBOutlet NSTextField *scriptPathTextField;
@@ -112,7 +114,7 @@
 #pragma mark -
 
 - (IBAction)checkSyntax:(id)sender {
-    NSString *scriptSuffix = [[scriptPathTextField stringValue] lastPathComponent];
+    NSString *scriptSuffix = [[scriptPathTextField stringValue] pathExtension];
     NSString *scriptFilename = [NSString stringWithFormat:@"PlatypusSyntaxCheckerTempScript.%@", scriptSuffix];
     NSString *tmpPath = [FILEMGR createTempFileNamed:scriptFilename withContents:[textView string]];
     
@@ -138,7 +140,10 @@
 
 - (void)changeFontSize:(CGFloat)delta {
     NSFont *font = [textView font];
-    CGFloat newFontSize = [font pointSize] + delta;
+    CGFloat newFontSize = fmax([font pointSize] + delta, MIN_EDITOR_TEXTVIEW_FONT_SIZE);
+    if ([font pointSize] == newFontSize) {
+        return;
+    }
     font = [[NSFontManager sharedFontManager] convertFont:font toSize:newFontSize];
     [textView setFont:font];
     [DEFAULTS setObject:@((float)newFontSize) forKey:DefaultsKey_EditorFontSize];

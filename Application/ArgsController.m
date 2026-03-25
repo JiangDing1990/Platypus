@@ -181,7 +181,13 @@
         NSMutableDictionary *attrs = [defaultAttrs mutableCopy];
         
         if ([scriptArgsTableView selectedRow] == i && scriptArgsTableView == [[self window] firstResponder]) {
-            attrs[NSBackgroundColorAttributeName] = [NSColor lightGrayColor];
+            NSColor *highlightColor = [NSColor lightGrayColor];
+            if (@available(macOS 10.14, *)) {
+                if ([[[NSAppearance currentAppearance] name] isEqualToString:NSAppearanceNameDarkAqua]) {
+                    highlightColor = [NSColor darkGrayColor];
+                }
+            }
+            attrs[NSBackgroundColorAttributeName] = highlightColor;
         }
         
         NSMutableAttributedString *attrStr = [[NSMutableAttributedString alloc] initWithString:a attributes:attrs];
@@ -282,9 +288,11 @@
     }
     
     NSInteger rowToSelect = selectedRow - 1;
-    
+
     [tableView reloadData];
-    [tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:rowToSelect] byExtendingSelection:NO];
+    if (rowToSelect >= 0) {
+        [tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:rowToSelect] byExtendingSelection:NO];
+    }
     [[self window] makeFirstResponder:tableView];
     [self updateGUIStatus];
 }

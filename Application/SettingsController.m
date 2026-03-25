@@ -130,7 +130,7 @@
     defaults[DefaultsKey_DefaultAuthor] = NSFullUserName();
     defaults[DefaultsKey_SymlinkFiles] = @NO;
     defaults[DefaultsKey_StripNib] = @YES;
-    defaults[DefaultsKey_SigningIdentity] = @"None";
+    defaults[DefaultsKey_SigningIdentity] = DEFAULT_SIGNING_IDENTITY;
     
     return defaults;
 }
@@ -246,7 +246,7 @@
 - (IBAction)applySettings:(id)sender {
     // Make sure bundle identifier ends with a '.'
     NSString *identifier = [defaultBundleIdentifierTextField stringValue];
-    if ([identifier characterAtIndex:[identifier length] - 1] != '.') {
+    if ([identifier length] && [identifier characterAtIndex:[identifier length] - 1] != '.') {
         [DEFAULTS setObject:[identifier stringByAppendingString:@"."]  forKey:DefaultsKey_BundleIdentifierPrefix];
     }
     [[self window] makeFirstResponder:nil];
