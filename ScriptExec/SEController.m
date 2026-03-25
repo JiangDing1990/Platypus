@@ -284,14 +284,14 @@ static const NSUInteger detailsHeight = 224;
         
         // Font and size
         NSNumber *userFontSizeNum = [DEFAULTS objectForKey:ScriptExecDefaultsKey_UserFontSize];
-        CGFloat fontSize = userFontSizeNum ? [userFontSizeNum floatValue] : [appSettings[AppSpecKey_TextSize] floatValue];
+        CGFloat fontSize = userFontSizeNum != nil ? [userFontSizeNum floatValue] : [appSettings[AppSpecKey_TextSize] floatValue];
         fontSize = fontSize != 0 ? fontSize : DEFAULT_TEXT_FONT_SIZE;
         
         if (appSettings[AppSpecKey_TextFont]) {
             textFont = [NSFont fontWithName:appSettings[AppSpecKey_TextFont] size:fontSize];
         }
         if (textFont == nil) {
-            textFont = [NSFont fontWithName:DEFAULT_TEXT_FONT_NAME size:DEFAULT_TEXT_FONT_SIZE];
+            textFont = [NSFont fontWithName:DEFAULT_TEXT_FONT_NAME size:fontSize];
         }
         
         BOOL darkMode = NO;

@@ -31,6 +31,7 @@
 #import <stdio.h>
 #import <unistd.h>
 #import <dlfcn.h>
+#import <sys/param.h>
 
 // New error code denoting that AuthorizationExecuteWithPrivileges no longer exists
 OSStatus const errAuthorizationFnNoLongerExists = -70001;
@@ -217,7 +218,8 @@ static OSStatus (*_AuthExecuteWithPrivsFn)(AuthorizationRef authorization, const
     args[numberOfArguments] = NULL;
     
     // change to the current dir specified
-    char *prevCwd = (char *)getcwd(nil, 0);
+    char prevCwd[MAXPATHLEN];
+    getcwd(prevCwd, sizeof(prevCwd));
     chdir([self.currentDirectoryPath fileSystemRepresentation]);
     
     //use Authorization Reference to execute script with privileges
