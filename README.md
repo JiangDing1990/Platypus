@@ -99,7 +99,7 @@ The resulting application bundle is created in the `products` directory.
 ## Installing command line tool in CI environment
 
 ```bash
-curl -O https://github.com/sveinbjornt/Platypus/releases/download/v5.5.0/platypus5.5.0.zip
+curl -L -O https://github.com/sveinbjornt/Platypus/releases/download/v5.5.0/platypus5.5.0.zip
 unzip -q platypus5.5.0.zip
 cd Platypus.app/Contents/Resources
 sudo bash InstallCommandLineTool.sh
